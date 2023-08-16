@@ -56,7 +56,7 @@ public class CLIappAssignment2{
 
                 case CREATE_NEW_ACCOUNT:
                     String name;
-                    int initialDeposit;
+                    double initialDeposit;
                     boolean valid = true;
                     System.out.printf("ID: SDB-%05d \n", (accounts.length + 1));
                     
@@ -84,7 +84,7 @@ public class CLIappAssignment2{
                     do{
                         valid = true;
                         System.out.print("\tInitial Deposit: ");
-                        initialDeposit = Scanner.nextInt();
+                        initialDeposit = Scanner.nextDouble();
                         Scanner.nextLine();
 
                         if (initialDeposit < 5000) {
@@ -114,8 +114,6 @@ public class CLIappAssignment2{
                     System.exit(0);
             }
         }while(true);    
-
-
 
     }
 }
