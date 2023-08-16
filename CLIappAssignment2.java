@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class CLIappAssignment2{
     private static final Scanner Scanner = new Scanner(System.in);
     public static void main(String[] args) {
@@ -20,6 +22,38 @@ public class CLIappAssignment2{
 
         String screen = DASHBOARD;
         String[][] accounts = new String[0][];
+
+        do{
+            final String APP_TITLE = String.format("%s%s%s",COLOR_BLUE_BOLD, screen, RESET);
+
+            System.out.println(clear);
+            System.out.println("\t" + APP_TITLE + "\n");
+
+            switch(screen){
+                case DASHBOARD:
+                    System.out.println("\t[1]. Open New Account");
+                    System.out.println("\t[2]. Deposit Money");
+                    System.out.println("\t[3]. Withdraw Money");
+                    System.out.println("\t[4]. Transfer Money");
+                    System.out.println("\t[5]. Check Account Balance");
+                    System.out.println("\t[6]. Drop Existing Account");
+                    System.out.println("\t[4]. Exit\n");
+                    System.out.print("Enter an Option to Continue > ");
+
+                    int option = Scanner.nextInt();
+                    Scanner.nextLine();
+
+                    switch (option) {
+                        case 1: screen = CREATE_NEW_ACCOUNT; break;
+                        case 2: screen = DEPOSIT; break;
+                        case 3: screen = WITHDRAWS; break;
+                        case 4: screen = TRANSFER; break;
+                        case 5: screen = CHECK_ACCOUNT_BALANCE; break;
+                        case 6: screen = DELETE_ACCOUNT; break;
+                        case 7: System.out.println(clear); System.exit(0); break;
+                    }
+                    break;
+
 
 
     }
