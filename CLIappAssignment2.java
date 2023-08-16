@@ -94,9 +94,24 @@ public class CLIappAssignment2{
                         }
                     }while(!valid);
 
-                    
-    
+                    String[][] tempAccounts = new String[accounts.length + 1][3];
+                    String accNum = String.format("SDB-%05d", tempAccounts.length);
+                    tempAccounts[tempAccounts.length - 1][0] = accNum;
+                    tempAccounts[tempAccounts.length - 1][1] = name;
+                    tempAccounts[tempAccounts.length - 1][2] = initialDeposit + "";
 
+                    accounts = tempAccounts;
+                    System.out.println();
+                    System.out.printf(SUCCESS_MSG, String.format("%s:%s added successfully \n", accNum, name));
+                    System.out.print("\tDo you want to continue adding marks? (Y/n)");
+                    if (!Scanner.nextLine().toUpperCase().strip().equals("Y"))
+                        screen = DASHBOARD;
+
+
+
+                    break;
+                default:
+                    System.exit(0);
             }
         }while(true);    
 
