@@ -54,6 +54,34 @@ public class CLIappAssignment2{
                     }
                     break;
 
+                case CREATE_NEW_ACCOUNT:
+                    String name;
+                    int initialDeposit;
+                    boolean valid = true;
+                    System.out.printf("ID: SDB-%05d \n", (accounts.length + 1));
+                    
+                    //Name validation 
+                    do{
+                        valid = true;
+                        System.out.print("\tEnter Customer Name: ");
+                        name = Scanner.nextLine().toUpperCase();
+                        if (name.isBlank()) {
+                            System.out.printf(ERROR_MSG , "Name Can't be empty");
+                            valid = false;
+                            continue;
+                        }else {
+                            for (int i = 0; i < name.length(); i++) {
+                                if (!(Character.isLetter(name.charAt(i)) || Character.isSpaceChar(name.charAt(i)))) {
+                                    System.out.printf(ERROR_MSG, "Invalid name");
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                    }while(!valid);
+    
+
             }
         }while(true);    
 
