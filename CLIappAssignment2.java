@@ -54,6 +54,9 @@ public class CLIappAssignment2{
                     }
                     break;
 
+            }
+        }while(true);    
+
 
 
     }
