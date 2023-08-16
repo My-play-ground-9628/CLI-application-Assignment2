@@ -78,8 +78,23 @@ public class CLIappAssignment2{
                                 }
                             }
                         }
-
                     }while(!valid);
+
+                    //Deposit validation
+                    do{
+                        valid = true;
+                        System.out.print("\tInitial Deposit: ");
+                        initialDeposit = Scanner.nextInt();
+                        Scanner.nextLine();
+
+                        if (initialDeposit < 5000) {
+                            System.out.printf(ERROR_MSG, "Insufficient Amount");
+                            valid = false;
+                            continue;
+                        }
+                    }while(!valid);
+
+                    
     
 
             }
