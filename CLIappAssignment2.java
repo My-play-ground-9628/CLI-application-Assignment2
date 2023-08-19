@@ -2,6 +2,21 @@ import java.util.Scanner;
 
 public class CLIappAssignment2{
     private static final Scanner Scanner = new Scanner(System.in);
+    final static String DASHBOARD = "Welcome to Smart Banking";
+    final static String CREATE_NEW_ACCOUNT = "Open new account";
+    final static String DEPOSIT = "Deposit money";
+    final static String WITHDRAWS = "Withdraw money";
+    final static String TRANSFER = "Transfer money";
+    final static String CHECK_ACCOUNT_BALANCE = "Check Account Balance";
+    final static String DELETE_ACCOUNT = "Drop existing account";
+
+
+    static String screen = DASHBOARD;
+    // String[][] accounts = new String[0][]{};
+    static String[][] accounts = {{"SDB-00001","Shashi","5000"}};
+    static String accNum = "";
+    static float newBalance = 0;
+
     public static void main(String[] args) {
         final String COLOR_BLUE_BOLD = "\033[34;1m";
         final String COLOR_RED_BOLD = "\033[31;1m";
@@ -11,18 +26,6 @@ public class CLIappAssignment2{
 
         final String ERROR_MSG = String.format("\t%s%s%s\n", COLOR_RED_BOLD, "%s", RESET);
         final String SUCCESS_MSG = String.format("\t%s%s%s\n", COLOR_GREEN_BOLD, "%s", RESET);
-
-        final String DASHBOARD = "Welcome to Smart Banking";
-        final String CREATE_NEW_ACCOUNT = "Open new account";
-        final String DEPOSIT = "Deposit money";
-        final String WITHDRAWS = "Withdraw money";
-        final String TRANSFER = "Transfer money";
-        final String CHECK_ACCOUNT_BALANCE = "Check Account Balance";
-        final String DELETE_ACCOUNT = "Drop existing account";
-
-        String screen = DASHBOARD;
-        // String[][] accounts = new String[0][]{};
-        String[][] accounts = {{"SDB-00001","Shashi","5000"}};
 
         do{
             final String APP_TITLE = String.format("%s%s%s",COLOR_BLUE_BOLD, screen, RESET);
@@ -108,13 +111,65 @@ public class CLIappAssignment2{
                     if (!Scanner.nextLine().toUpperCase().strip().equals("Y"))
                         screen = DASHBOARD;
 
-
-
                     break;
 
                 case DEPOSIT:
                     int index=0;
                     int depositAmount=0;
+                    
+                    do{
+                        valid = true;
+                        System.out.print("\tEnter Account Number: ");
+                        accNum = Scanner.nextLine().toUpperCase().strip();
+
+                        if (accNum.isBlank()) {
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }else if (!accNum.startsWith("SDB-")||(accNum.length()< 9)) {
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }else if ((Integer.valueOf(accNum.substring(8))) > accounts.length){
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }
+                        index = Integer.valueOf(accNum.substring(8));
+                        System.out.printf("\tCurrent Balance: Rs.%,.2f\n", Float.valueOf(accounts[index-1][2]));
+                        valid = true;
+                        do{
+                            System.out.print("\tDeposit amount: ");
+                            depositAmount = Scanner.nextInt();
+                            Scanner.nextLine();
+
+                            if (depositAmount < 500) {
+                                System.out.printf(ERROR_MSG, "Insufficient Amount");
+                                valid = false;
+                                screen = DASHBOARD;
+                                continue;
+                            }else valid=true;
+                        }while(!valid);
+
+                    }while(!valid);
+                    newBalance = Float.valueOf(accounts[index-1][2])+ depositAmount;
+                    accounts[index-1][2] = newBalance+""; 
+                    System.out.printf("\tNew Balance: Rs: %,.2f\n",newBalance);
+                    System.out.print("\tDo you want to continue ? (Y/n)");
+                    if (!Scanner.nextLine().toUpperCase().strip().equals("Y"))
+                        screen = DASHBOARD;
+
+                    break;
+                       
+                case WITHDRAWS:
+                    index=0;
+                    int withdrawAmount=0;
                     
                     do{
                         valid = true;
@@ -140,43 +195,168 @@ public class CLIappAssignment2{
                             screen = DASHBOARD;
                             continue;
                         }
-
                         index = Integer.valueOf(accNum.substring(8));
                         System.out.printf("\tCurrent Balance: Rs.%s.00\n", accounts[index-1][2]);
+
                         do{
-                            System.out.print("\tDeposit amount: ");
-                            depositAmount = Scanner.nextInt();
+                            System.out.print("\tWithdraw amount: ");
+                            withdrawAmount = Scanner.nextInt();
                             Scanner.nextLine();
 
-                            if (depositAmount < 500) {
+                            if (withdrawAmount < 100) {
                                 System.out.printf(ERROR_MSG, "Insufficient Amount");
+                                valid=false;
                                 screen = DASHBOARD;
+                                continue;
+                            }else if (Float.valueOf(accounts[index-1][2])-withdrawAmount < 500){
+                                System.out.printf(ERROR_MSG, "Remaining Account balance is less than 500");
+                                valid = false;
+                                //screen = DASHBOARD;
                                 continue;
                             }
                         }while(!valid);
-
-                        float newBalance = Float.valueOf(accounts[index-1][2])+ depositAmount;
-                        accounts[index-1][2] = newBalance+""; 
-                        System.out.printf("\tNew Balance: Rs: %,.2f\n",newBalance);
-                        System.out.print("\tDo you want to continue ? (Y/n)");
-                        if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
-                        screen = DASHBOARD;
-                        break;
-
                     }while(!valid);
+                    newBalance = Float.valueOf(accounts[index-1][2])- withdrawAmount;
+                    accounts[index-1][2] = newBalance+""; 
+                    System.out.printf("\tNew Balance: Rs: %,.2f\n",newBalance);
+                    System.out.print("\tDo you want to continue ? (Y/n)");
+                    if (!Scanner.nextLine().toUpperCase().strip().equals("Y"))
+                        screen = DASHBOARD;
+
+                    break;
+                
+                case TRANSFER:
+                    index=0;
+                    int transferAmount = 0;
+                    String FromAccNum = "";
+                    String ToAccNum = "";
                     
-                
-                
-                case WITHDRAWS:
+                    do{
+                        valid = true;
+                        System.out.print("\tEnter from Account Number: ");
+                        FromAccNum = Scanner.nextLine().toUpperCase().strip();
+                        
+                        if (FromAccNum.isBlank()) {
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }else if (!FromAccNum.startsWith("SDB-")) {
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }else if ((Integer.valueOf(FromAccNum.substring(8))) > accounts.length){
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }
+                        index = Integer.valueOf(FromAccNum.substring(8));
+                        System.out.printf("\tFrom Account Name: %s\n", accounts[index-1][1]);
+
+                        valid = true;
+                        System.out.print("\tEnter ToAccount Number: ");
+                        FromAccNum = Scanner.nextLine().toUpperCase().strip();
+                        
+                        if (FromAccNum.isBlank()) {
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }else if (!FromAccNum.startsWith("SDB-")) {
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }else if ((Integer.valueOf(FromAccNum.substring(8))) > accounts.length){
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }
+                        index = Integer.valueOf(FromAccNum.substring(8));
+                        System.out.printf("\tFrom Account Name: %s\n", accounts[index-1][1]);
+
+
+                        do{
+                            System.out.print("\tTransfer amount: ");
+                            withdrawAmount = Scanner.nextInt();
+                            Scanner.nextLine();
+
+                            if (withdrawAmount < 100) {
+                                System.out.printf(ERROR_MSG, "Insufficient Amount");
+                                valid=false;
+                                screen = DASHBOARD;
+                                continue;
+                            }else if (Float.valueOf(accounts[index-1][2])-transferAmount < 500){
+                                System.out.printf(ERROR_MSG, "Remaining Account balance is less than 500");
+                                valid = false;
+                                //screen = DASHBOARD;
+                                continue;
+                            }
+                        }while(!valid);
+                    }while(!valid);
+
+
+
                     break;
                     
+
                 default:
                     System.exit(0);
             }
         }while(true);    
-
+        
        
     }
+
+    // public static final String accNumValidate(String Input) {
+    //     boolean valid = true;
+    //     accNumValidation:
+    //     do{
+    //         valid = true;
+    //         System.out.printf("Enter %s: ",Input);
+    //         accNum = Scanner.nextLine().strip();
+    //         if (accNum.isBlank()) {
+    //             valid = false;
+    //             System.out.print("\tDo you want to try again? (Y/n)");
+    //             if (Scanner.nextLine().strip().toUpperCase().equals("Y")) {
+    //                 continue accNumValidation;
+    //             }
+    //             else {
+    //                 screen = DASHBOARD;
+    //                 accNum = screen;
+    //                 continue;
+
+    //             }
+                
+
+    //         }else if ((!accNum.startsWith("SDB-"))||(accNum.length()< 9)) {
+    //             valid = false;
+    //             System.out.print("\tDo you want to try again? (Y/n)");
+    //             if (!Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+    //             screen = DASHBOARD;
+    //             continue;
+    //         }else if ((Integer.valueOf(accNum.substring(8))) > accounts.length){
+    //             valid = false;
+    //             System.out.print("\tDo you want to try again? (Y/n)");
+    //             if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+    //             screen = DASHBOARD;
+    //             continue;
+    //         }e
+            
+    //     }while(!valid);
+    //     return accNum;
+        
+    // }
+    
     
    
 }
