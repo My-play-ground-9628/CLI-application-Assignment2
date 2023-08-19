@@ -21,7 +21,8 @@ public class CLIappAssignment2{
         final String DELETE_ACCOUNT = "Drop existing account";
 
         String screen = DASHBOARD;
-        String[][] accounts = new String[0][];
+        // String[][] accounts = new String[0][]{};
+        String[][] accounts = {{"SDB-00001","Shashi","5000"}};
 
         do{
             final String APP_TITLE = String.format("%s%s%s",COLOR_BLUE_BOLD, screen, RESET);
@@ -110,10 +111,72 @@ public class CLIappAssignment2{
 
 
                     break;
+
+                case DEPOSIT:
+                    int index=0;
+                    int depositAmount=0;
+                    
+                    do{
+                        valid = true;
+                        System.out.print("\tEnter Account Number: ");
+                        accNum = Scanner.nextLine().toUpperCase().strip();
+                        
+                        if (accNum.isBlank()) {
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }else if (!accNum.startsWith("SDB-")) {
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }else if ((Integer.valueOf(accNum.substring(8))) > accounts.length){
+                            valid = false;
+                            System.out.print("\tDo you want to try again? (Y/n)");
+                            if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                            screen = DASHBOARD;
+                            continue;
+                        }
+
+                        index = Integer.valueOf(accNum.substring(8));
+                        System.out.printf("\tCurrent Balance: Rs.%s.00\n", accounts[index-1][2]);
+                        do{
+                            System.out.print("\tDeposit amount: ");
+                            depositAmount = Scanner.nextInt();
+                            Scanner.nextLine();
+
+                            if (depositAmount < 500) {
+                                System.out.printf(ERROR_MSG, "Insufficient Amount");
+                                screen = DASHBOARD;
+                                continue;
+                            }
+                        }while(!valid);
+
+                        float newBalance = Float.valueOf(accounts[index-1][2])+ depositAmount;
+                        accounts[index-1][2] = newBalance+""; 
+                        System.out.printf("\tNew Balance: Rs: %,.2f\n",newBalance);
+                        System.out.print("\tDo you want to continue ? (Y/n)");
+                        if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
+                        screen = DASHBOARD;
+                        break;
+
+                    }while(!valid);
+                    
+                
+                
+                case WITHDRAWS:
+                    break;
+                    
                 default:
                     System.exit(0);
             }
         }while(true);    
 
+       
     }
+    
+   
 }
