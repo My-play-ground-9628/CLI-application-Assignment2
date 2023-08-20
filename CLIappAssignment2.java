@@ -13,7 +13,6 @@ public class CLIappAssignment2{
 
     static String screen = DASHBOARD;
     static String[][] accounts = new String[0][];
-    //static String[][] accounts = {{"SDB-00001","Shashi","5000"},{"SDB-00002", "Shani", "7000"}};
     static String accNum = "";
     static float newBalance = 0;
 
@@ -41,7 +40,7 @@ public class CLIappAssignment2{
                     System.out.println("\t[4]. Transfer Money");
                     System.out.println("\t[5]. Check Account Balance");
                     System.out.println("\t[6]. Drop Existing Account");
-                    System.out.println("\t[4]. Exit\n");
+                    System.out.println("\t[7]. Exit\n");
                     System.out.print("Enter an Option to Continue > ");
 
                     int option = Scanner.nextInt();
@@ -222,7 +221,7 @@ public class CLIappAssignment2{
                             if (withdrawAmount < 100) {
                                 System.out.printf(ERROR_MSG, "Insufficient Amount");
                                 valid=false;
-                                screen = DASHBOARD;
+                                //screen = DASHBOARD;
                                 continue;
                             }else if (Float.valueOf(accounts[index][2])-withdrawAmount < 500){
                                 System.out.printf(ERROR_MSG, "Remaining Account balance is less than 500");
@@ -238,7 +237,7 @@ public class CLIappAssignment2{
                     System.out.print("\tDo you want to continue ? (Y/n)");
                     if (!Scanner.nextLine().toUpperCase().strip().equals("Y"))
                         screen = DASHBOARD;
-
+                    
                     break;
                 
                 case TRANSFER:
@@ -357,7 +356,6 @@ public class CLIappAssignment2{
                     
                 case CHECK_ACCOUNT_BALANCE:
                     index = 0;
-                    float availableWithdrawBalance = 0;
                     do{
                         valid = true;
                         System.out.print("\tEnter Account Number: ");
@@ -382,7 +380,7 @@ public class CLIappAssignment2{
                             screen = DASHBOARD;
                             continue;
                         }
-                        for (int i = 0; i < accounts.length-1; i++) {
+                        for (int i = 0; i < accounts.length; i++) {
                             if (accounts[i][0].equals(accNum)) {
                                 index = i;
                                 break;
@@ -403,6 +401,7 @@ public class CLIappAssignment2{
                 case DELETE_ACCOUNT:
                 index = 0;
                 String delName = "";
+                    deleteLoop:
                     do{
                         valid = true;
                         System.out.print("\tEnter Account Number: ");
@@ -436,11 +435,13 @@ public class CLIappAssignment2{
                         delName = accounts[index][1];
                         System.out.printf("\tAccount holder's Name: %s\n", accounts[index][1]);
                         System.out.printf("\tCurrent Balance: Rs.%,.2f\n", Float.valueOf(accounts[index][2]));
-                        System.out.print("\tAre you sure you want to delete this account? (Y/n)");
+                        
+                        
+                    
+                    System.out.print("\tAre you sure you want to delete this account? (Y/n)");
                         if (!Scanner.nextLine().toUpperCase().strip().equals("Y"))
                             valid = false;
-                        
-                    }while(!valid);
+                            screen = DASHBOARD;
         
                     tempAccounts = new String[accounts.length - 1][3];
 
@@ -457,10 +458,18 @@ public class CLIappAssignment2{
 
                     accounts = tempAccounts;
                     System.out.println();
-                    System.out.printf(SUCCESS_MSG, String.format("%s :  has been deleted successfully", accNum,delName));
+                    System.out.printf(SUCCESS_MSG, String.format("%s : %s has been deleted successfully", accNum,delName));
                     System.out.print("\tDo you want to continue (Y/n)? ");
-                    if (Scanner.nextLine().strip().toUpperCase().equals("Y")) continue;
-                    screen = DASHBOARD;
+                    if (!Scanner.nextLine().toUpperCase().strip().equals("Y")){
+                        
+                        screen = DASHBOARD;
+                    }else {
+                        valid = false;
+                        continue deleteLoop;
+                    }
+                    
+                    }while(!valid);
+                    
                     break;
 
                 default:
