@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class CLIappAssignment2{
     private static final Scanner Scanner = new Scanner(System.in);
     final static String DASHBOARD = "Welcome to Smart Banking";
-    final static String CREATE_NEW_ACCOUNT = "Open new account";
+    final static String CREATE_NEW_ACCOUNT = "Open new account ";
     final static String DEPOSIT = "Deposit money";
     final static String WITHDRAWS = "Withdraw money";
     final static String TRANSFER = "Transfer money";
@@ -22,8 +22,8 @@ public class CLIappAssignment2{
 
 
     static String screen;
-    //static String[][] accounts = new String[0][];
-    static String[][] accounts = {{"SDB-00001","Shashi","10000"},{"SDB-00002","Shani","15000"},{"SDB-00003","sew","8000"}};
+    static String[][] accounts = new String[0][];
+    //static String[][] accounts = {{"SDB-00001","Shashi","10000"},{"SDB-00002","Shani","15000"},{"SDB-00003","sew","8000"}};
     static String accNum = "";
     static float newBalance = 0;
 
@@ -238,16 +238,6 @@ public class CLIappAssignment2{
                                 continue;
                             }
                             else valid = true;
-                            // newBalance = Float.valueOf(accounts[index][2])- withdrawAmount;
-                            // accounts[index][2] = newBalance+""; 
-                            // System.out.printf("\tNew Balance: Rs: %,.2f\n",newBalance);
-                            // System.out.print("\tDo you want to continue ? (Y/n)");
-                            // if (!Scanner.nextLine().toUpperCase().strip().equals("Y")){
-                            //     screen = DASHBOARD;
-                            // }
-                            // else {
-                            //     continue withdrawLoop;
-                            // }
                                 
 
                         }while(!valid);
@@ -348,7 +338,6 @@ public class CLIappAssignment2{
                             }else if ((Float.valueOf(accounts[index1][2])-transferAmount) < 500){
                                 System.out.printf(ERROR_MSG, "Remaining Account balance is less than 500");
                                 valid = false;
-                                //screen = DASHBOARD;
                                 continue;
                             }
                             
@@ -356,9 +345,8 @@ public class CLIappAssignment2{
                         newBalance1 = Float.valueOf(accounts[index1][2])- transferAmount;
                         newBalance1 = newBalance1 * 98 /100;
                         if (newBalance1 < 500){
-                            System.out.printf(ERROR_MSG, "Remaining From Account balance is less than 500");
+                            System.out.printf(ERROR_MSG, "Remaining FROM Account balance is less than 500");
                             valid = false;
-                            //screen = DASHBOARD;
                             continue;
                         }
                         
@@ -464,21 +452,17 @@ public class CLIappAssignment2{
                                     break;
                                 }else {
                                     for (int i = 0; i < accounts.length; i++) {
-                                    if (i < index){
-                                        tempAccounts[i] = accounts[i];
-                                        
-                                    }else if (i == index){
-                                        continue;
-                                    }else{
-                                        tempAccounts[i - 1] = accounts[i];
+                                        if (i < index){
+                                            tempAccounts[i] = accounts[i];
+                                            
+                                        }else if (i == index){
+                                            continue;
+                                        }else{
+                                            tempAccounts[i - 1] = accounts[i];
+                                        }
                                     }
                                 }
                                     
-                                }
-                                    
-
-        
-                        
                         }else {
                             System.out.println("\tAccount number doesn't exist"); 
                             break;
@@ -528,10 +512,10 @@ public class CLIappAssignment2{
         boolean valid = true;
         for (int i = 0; i < input.length(); i++) {
             if (!(Character.isLetter(input.charAt(i)) || Character.isSpaceChar(input.charAt(i)))) {
-            System.out.printf(ERROR_MSG, errMsg);
-            valid = false;
-            break;
-        }   
+                System.out.printf(ERROR_MSG, errMsg);
+                valid = false;
+                break;
+            }   
         }
         return valid;
     }
